@@ -88,9 +88,13 @@ class CardWidget(QFrame):
 
         # Update label color if needed
         if self.card.card_type == CardType.MINUS:
-            self.label.setStyleSheet("color: #500000; font-weight: bold; border: none; background: transparent;")
+            self.label.setStyleSheet(
+                "color: #500000; font-weight: bold; border: none; background: transparent;"
+            )
         elif self.card.card_type == CardType.PLUS:
-            self.label.setStyleSheet("color: #000050; font-weight: bold; border: none; background: transparent;")
+            self.label.setStyleSheet(
+                "color: #000050; font-weight: bold; border: none; background: transparent;"
+            )
         else:
             self.label.setStyleSheet("color: black; border: none; background: transparent;")
 
@@ -300,7 +304,9 @@ class PazaakWindow(QMainWindow):
         """Initialize and start the game with the selected side deck"""
         self.current_sideboard = [Card(card.name, card.value, card.card_type) for card in sideboard]
         self.human = Player("Player")
-        self.human.sideboard = [Card(card.name, card.value, card.card_type) for card in self.current_sideboard]
+        self.human.sideboard = [
+            Card(card.name, card.value, card.card_type) for card in self.current_sideboard
+        ]
 
         self.ai = AIPlayer(self.ai_profile)
 
@@ -309,7 +315,9 @@ class PazaakWindow(QMainWindow):
 
         # Update UI with opponent info
         self.opp_info.setText(f"Opponent: {self.ai.name}")
-        self.side_deck_label.setText("Side Deck: " + ", ".join(str(card) for card in self.current_sideboard))
+        self.side_deck_label.setText(
+            "Side Deck: " + ", ".join(str(card) for card in self.current_sideboard)
+        )
         self.log_text.clear()
         self.log_message("New game started! Good luck.")
         self.log_message(f"Opponent: {self.ai.name}")
@@ -323,7 +331,9 @@ class PazaakWindow(QMainWindow):
             return
 
         # Update Opponent
-        self.opp_score_label.setText(f"Score: {self.ai.score} {'(STANDING)' if self.ai.is_standing else ''}")
+        self.opp_score_label.setText(
+            f"Score: {self.ai.score} {'(STANDING)' if self.ai.is_standing else ''}"
+        )
         self.clear_layout(self.opp_board_layout)
         for i, card in enumerate(self.ai.board):
             cw = CardWidget(card, i, self.current_theme, is_opponent=True)
@@ -333,11 +343,15 @@ class PazaakWindow(QMainWindow):
         self.clear_layout(self.opp_hand_layout)
         for i in range(len(self.ai.hand)):
             lbl = QLabel("Card")
-            lbl.setStyleSheet(f"background-color: gray; border: 1px solid black; padding: 5px; color: {self.current_theme['text']}")
+            lbl.setStyleSheet(
+                f"background-color: gray; border: 1px solid black; padding: 5px; color: {self.current_theme['text']}"
+            )
             self.opp_hand_layout.addWidget(lbl)
 
         # Update Player
-        self.player_score_label.setText(f"Score: {self.human.score} {'(STANDING)' if self.human.is_standing else ''}")
+        self.player_score_label.setText(
+            f"Score: {self.human.score} {'(STANDING)' if self.human.is_standing else ''}"
+        )
         self.clear_layout(self.player_board_layout)
         for i, card in enumerate(self.human.board):
             cw = CardWidget(card, i, self.current_theme, is_opponent=False)
@@ -350,11 +364,17 @@ class PazaakWindow(QMainWindow):
             self.player_hand_layout.addWidget(cw)
 
         # Buttons
-        can_act = self.game.current_turn == self.human and not self.human.is_standing and not self.game.is_round_over
+        can_act = (
+            self.game.current_turn == self.human
+            and not self.human.is_standing
+            and not self.game.is_round_over
+        )
         self.btn_end_turn.setEnabled(can_act)
         self.btn_stand.setEnabled(can_act)
 
-        self.scoreboard_label.setText(f"Sets Won - You: {self.human.sets_won} | {self.ai.name}: {self.ai.sets_won}")
+        self.scoreboard_label.setText(
+            f"Sets Won - You: {self.human.sets_won} | {self.ai.name}: {self.ai.sets_won}"
+        )
 
         if self.game.is_game_over and self.game.winner:
             self.center_label.setText(f"Game Over! Winner: {self.game.winner.name}")
@@ -384,7 +404,12 @@ class PazaakWindow(QMainWindow):
                 QTimer.singleShot(1000, self.ai_turn)
 
         # Auto-stand check
-        if self.auto_stand_checkbox.isChecked() and self.game.current_turn == self.human and not self.human.is_standing and self.human.score >= self.game.WIN_SCORE:
+        if (
+            self.auto_stand_checkbox.isChecked()
+            and self.game.current_turn == self.human
+            and not self.human.is_standing
+            and self.human.score >= self.game.WIN_SCORE
+        ):
             self.log_message("Auto-stand activated at 20.")
             self.game.stand(self.human)
             self.sound_manager.play("stand")
@@ -503,7 +528,9 @@ class PazaakWindow(QMainWindow):
             profile = dialog.get_selected_opponent()
             if profile:
                 self.ai_profile = profile
-                self.log_message(f"Opponent changed to {self.ai_profile.name}. Starting new game...")
+                self.log_message(
+                    f"Opponent changed to {self.ai_profile.name}. Starting new game..."
+                )
                 self.new_game_same_deck()
 
     def log_message(self, message: str):

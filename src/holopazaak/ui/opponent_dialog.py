@@ -3,7 +3,15 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QDialog, QHBoxLayout, QLabel, QListWidget, QListWidgetItem, QPushButton, QVBoxLayout
+from qtpy.QtWidgets import (
+    QDialog,
+    QHBoxLayout,
+    QLabel,
+    QListWidget,
+    QListWidgetItem,
+    QPushButton,
+    QVBoxLayout,
+)
 
 from holopazaak.data.opponents import OPPONENTS
 
@@ -59,7 +67,9 @@ class OpponentSelectionDialog(QDialog):
         if self.list_widget.count() > 0:
             self.list_widget.setCurrentRow(0)
 
-    def on_selection_changed(self, current: QListWidgetItem | None, previous: QListWidgetItem | None):
+    def on_selection_changed(
+        self, current: QListWidgetItem | None, previous: QListWidgetItem | None
+    ):
         if current:
             opp_id = current.data(Qt.UserRole)
             # Find profile

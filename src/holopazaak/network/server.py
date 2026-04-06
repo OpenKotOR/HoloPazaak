@@ -298,7 +298,9 @@ class PazaakServer:
         available_games = [
             {
                 "game_id": game.game_id,
-                "host_name": self.players_by_id.get(game.host_id, ConnectedPlayer("", "Unknown", None)).name,
+                "host_name": self.players_by_id.get(
+                    game.host_id, ConnectedPlayer("", "Unknown", None)
+                ).name,
                 "player_count": len(game.players),
                 "is_started": game.is_started,
             }

@@ -175,7 +175,9 @@ class PazaakGame:
         # Coin flip for first player (pazaak-iron-ginger coin_flip)
         self.first_player = random.choice([self.player1, self.player2])
 
-        self._emit_event("game_start", message=f"Game started! {self.first_player.name} goes first.")
+        self._emit_event(
+            "game_start", message=f"Game started! {self.first_player.name} goes first."
+        )
         self.start_round()
 
     def start_round(self):
@@ -203,7 +205,11 @@ class PazaakGame:
         else:
             self.current_player = self.first_player
 
-        self._emit_event("round_start", message=f"Round {self.round_number} started. {self.current_player.name}'s turn.", data={"round": self.round_number})
+        self._emit_event(
+            "round_start",
+            message=f"Round {self.round_number} started. {self.current_player.name}'s turn.",
+            data={"round": self.round_number},
+        )
 
         self.start_turn()
 
@@ -235,19 +241,31 @@ class PazaakGame:
         self.current_player.add_card_to_board(card)
 
         self._emit_event(
-            "card_drawn", player=self.current_player.name, card=card, message=f"{self.current_player.name} drew {card}", data={"score": self.current_player.score}
+            "card_drawn",
+            player=self.current_player.name,
+            card=card,
+            message=f"{self.current_player.name} drew {card}",
+            data={"score": self.current_player.score},
         )
 
         # Check for bust immediately after draw
         if self.current_player.is_bust:
-            self._emit_event("bust", player=self.current_player.name, message=f"{self.current_player.name} busted with {self.current_player.score}!")
+            self._emit_event(
+                "bust",
+                player=self.current_player.name,
+                message=f"{self.current_player.name} busted with {self.current_player.score}!",
+            )
             self.resolve_round()
             return
 
         # Check for full board (9 cards) - automatic win
         # From Java_Pazaak check() method
         if self.current_player.is_full:
-            self._emit_event("board_full", player=self.current_player.name, message=f"{self.current_player.name} filled the board without busting!")
+            self._emit_event(
+                "board_full",
+                player=self.current_player.name,
+                message=f"{self.current_player.name} filled the board without busting!",
+            )
             self.round_winner = self.current_player
             self.resolve_round()
             return
@@ -300,7 +318,12 @@ class PazaakGame:
             player.hand.pop(card_index)
             player.played_card_this_turn = True
 
-            self._emit_event("card_played", player=player.name, card=card, message=f"{player.name} played Double card!")
+            self._emit_event(
+                "card_played",
+                player=player.name,
+                card=card,
+                message=f"{player.name} played Double card!",
+            )
             return True
 
         if card.card_type in (CardType.FLIP_TWO_FOUR, CardType.FLIP_THREE_SIX):
@@ -309,17 +332,30 @@ class PazaakGame:
             player.played_card_this_turn = True
 
             target_vals = "2&4" if card.card_type == CardType.FLIP_TWO_FOUR else "3&6"
-            self._emit_event("card_played", player=player.name, card=card, message=f"{player.name} flipped all {target_vals}!")
+            self._emit_event(
+                "card_played",
+                player=player.name,
+                card=card,
+                message=f"{player.name} flipped all {target_vals}!",
+            )
             return True
 
         # Standard card play
         played_card = player.play_card_from_hand(card_index)
         if played_card:
-            self._emit_event("card_played", player=player.name, card=played_card, message=f"{player.name} played {played_card}", data={"score": player.score})
+            self._emit_event(
+                "card_played",
+                player=player.name,
+                card=played_card,
+                message=f"{player.name} played {played_card}",
+                data={"score": player.score},
+            )
 
             # Check for bust after playing
             if player.is_bust:
-                self._emit_event("bust", player=player.name, message=f"{player.name} busted with {player.score}!")
+                self._emit_event(
+                    "bust", player=player.name, message=f"{player.name} busted with {player.score}!"
+                )
                 self.resolve_round()
 
             return True
@@ -339,7 +375,12 @@ class PazaakGame:
 
         player.stand()
 
-        self._emit_event("stand", player=player.name, message=f"{player.name} stands at {player.score}", data={"score": player.score})
+        self._emit_event(
+            "stand",
+            player=player.name,
+            message=f"{player.name} stands at {player.score}",
+            data={"score": player.score},
+        )
 
         self.end_turn()
 
@@ -413,7 +454,11 @@ class PazaakGame:
             elif self.player1.is_bust and self.player2.is_bust:
                 # Both bust - based on who busted first (current player)
                 self.round_winner = self.get_opponent(self.current_player)
-                self.round_result = RoundResult.PLAYER1_WIN if self.round_winner == self.player1 else RoundResult.PLAYER2_WIN
+                self.round_result = (
+                    RoundResult.PLAYER1_WIN
+                    if self.round_winner == self.player1
+                    else RoundResult.PLAYER2_WIN
+                )
             else:
                 # Compare scores (both must be standing or at 20)
                 if p1_score > p2_score:
@@ -435,7 +480,11 @@ class PazaakGame:
                         self.round_result = RoundResult.TIE
         else:
             # Round winner was set (full board, etc.)
-            self.round_result = RoundResult.PLAYER1_WIN if self.round_winner == self.player1 else RoundResult.PLAYER2_WIN
+            self.round_result = (
+                RoundResult.PLAYER1_WIN
+                if self.round_winner == self.player1
+                else RoundResult.PLAYER2_WIN
+            )
 
         # Award set to winner
         if self.round_winner:
@@ -474,11 +523,21 @@ class PazaakGame:
         if self.player1.sets_won >= self.SETS_TO_WIN:
             self.winner = self.player1
             self.phase = GamePhase.MATCH_END
-            self._emit_event("match_end", player=self.player1.name, message=f"{self.player1.name} wins the match!", data={"winner": self.player1.name})
+            self._emit_event(
+                "match_end",
+                player=self.player1.name,
+                message=f"{self.player1.name} wins the match!",
+                data={"winner": self.player1.name},
+            )
         elif self.player2.sets_won >= self.SETS_TO_WIN:
             self.winner = self.player2
             self.phase = GamePhase.MATCH_END
-            self._emit_event("match_end", player=self.player2.name, message=f"{self.player2.name} wins the match!", data={"winner": self.player2.name})
+            self._emit_event(
+                "match_end",
+                player=self.player2.name,
+                message=f"{self.player2.name} wins the match!",
+                data={"winner": self.player2.name},
+            )
 
     @property
     def is_round_over(self) -> bool:

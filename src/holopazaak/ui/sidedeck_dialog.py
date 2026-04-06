@@ -57,7 +57,9 @@ class SideDeckCardWidget(QFrame):
             color = "#FFFFAA"  # Yellowish
 
         if self.is_selected:
-            self.setStyleSheet(f"background-color: {color}; border: 3px solid #00FF00; border-radius: 5px;")
+            self.setStyleSheet(
+                f"background-color: {color}; border: 3px solid #00FF00; border-radius: 5px;"
+            )
         else:
             self.setStyleSheet(f"background-color: {color}; border-radius: 5px;")
 
@@ -193,7 +195,9 @@ class SideDeckSelectionDialog(QDialog):
         count = len(self.selected_indices)
         self.selected_label.setText(f"Selected: {count} / 10")
         self.btn_confirm.setEnabled(count == 10)
-        self.btn_confirm.setText(f"Confirm ({count}/10)" if count < 10 else "Confirm and Start Game")
+        self.btn_confirm.setText(
+            f"Confirm ({count}/10)" if count < 10 else "Confirm and Start Game"
+        )
 
     def random_deck(self):
         """Select 10 random cards"""

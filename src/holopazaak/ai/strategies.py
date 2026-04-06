@@ -153,7 +153,6 @@ class NormalAI(AIStrategy):
         self.stand_threshold = stand_threshold
 
     def decide(self, game: PazaakGame, player: Player) -> AIDecision:
-
         opponent = game.get_opponent(player)
         score = player.score
         opp_score = opponent.score
@@ -209,7 +208,9 @@ class NormalAI(AIStrategy):
         # Can't save, just stand (will lose)
         return AIDecision(AIAction.STAND)
 
-    def _handle_opponent_standing(self, player: Player, opponent: Player, score: int, opp_score: int) -> AIDecision:
+    def _handle_opponent_standing(
+        self, player: Player, opponent: Player, score: int, opp_score: int
+    ) -> AIDecision:
         """Handle when opponent is standing."""
         from holopazaak.game.card import CardType
 
@@ -241,7 +242,9 @@ class NormalAI(AIStrategy):
         # Can't beat with hand card, end turn to draw
         return AIDecision(AIAction.END_TURN)
 
-    def _choose_card_to_play(self, player: Player, opponent: Player, score: int) -> AIDecision | None:
+    def _choose_card_to_play(
+        self, player: Player, opponent: Player, score: int
+    ) -> AIDecision | None:
         """Choose a card to play from hand."""
         from holopazaak.game.card import CardType
 
@@ -337,7 +340,6 @@ class HardAI(AIStrategy):
         self.tie_accept_chance = tie_accept_chance
 
     def decide(self, game: PazaakGame, player: Player) -> AIDecision:
-
         opponent = game.get_opponent(player)
         score = player.score
         opp_score = opponent.score
@@ -543,7 +545,6 @@ class ExpertAI(AIStrategy):
     description = "Expert AI with target score progression"
 
     def decide(self, game: PazaakGame, player: Player) -> AIDecision:
-
         opponent = game.get_opponent(player)
         score = player.score
         opp_score = opponent.score
@@ -682,7 +683,6 @@ class MasterAI(AIStrategy):
         self.tie_accept_chance = tie_accept_chance
 
     def decide(self, game: PazaakGame, player: Player) -> AIDecision:
-
         opponent = game.get_opponent(player)
         score = player.score
         opp_score = opponent.score
@@ -705,9 +705,13 @@ class MasterAI(AIStrategy):
             return self._handle_bust(player, score, opp_score)
 
         if opponent.is_standing:
-            return self._handle_opponent_standing(player, score, opp_score, safe_to_draw, hand_cards_left)
+            return self._handle_opponent_standing(
+                player, score, opp_score, safe_to_draw, hand_cards_left
+            )
         else:
-            return self._handle_opponent_playing(player, score, opp_score, safe_to_draw, hand_cards_left)
+            return self._handle_opponent_playing(
+                player, score, opp_score, safe_to_draw, hand_cards_left
+            )
 
     def _get_highest_minus_value(self, player: Player) -> int:
         from holopazaak.game.card import CardType
@@ -753,7 +757,6 @@ class MasterAI(AIStrategy):
         safe_to_draw: bool,
         hand_cards: int,
     ) -> AIDecision:
-
         # Opponent busted, we win
         if opp_score > 20:
             return AIDecision(AIAction.STAND)
@@ -785,7 +788,6 @@ class MasterAI(AIStrategy):
         safe_to_draw: bool,
         hand_cards: int,
     ) -> AIDecision:
-
         # Try for 20
         for i, card in enumerate(player.hand):
             result, use_minus = self._calc_result(score, card)

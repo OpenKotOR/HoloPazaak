@@ -6,7 +6,11 @@ from qtpy.QtCore import QThread
 from qtpy.QtWidgets import QApplication
 
 from holopazaak.config import CURRENT_VERSION
-from holopazaak.main_settings import setup_holopazaak_default_env, setup_post_init_settings, setup_pre_init_settings
+from holopazaak.main_settings import (
+    setup_holopazaak_default_env,
+    setup_post_init_settings,
+    setup_pre_init_settings,
+)
 from holopazaak.ui.mainwindow import PazaakWindow
 
 

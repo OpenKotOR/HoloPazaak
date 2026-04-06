@@ -215,7 +215,9 @@ class DeckBuilderDialog(QDialog):
         layout.addWidget(title)
 
         # Instructions
-        instructions = QLabel("Click cards to add them to your deck. Right-click to remove. Flip cards (±) can be toggled during play.")
+        instructions = QLabel(
+            "Click cards to add them to your deck. Right-click to remove. Flip cards (±) can be toggled during play."
+        )
         instructions.setWordWrap(True)
         instructions.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(instructions)
@@ -353,7 +355,11 @@ class DeckBuilderDialog(QDialog):
     def _confirm_deck(self):
         """Confirm the deck selection."""
         if len(self.selected_cards) != 10:
-            QMessageBox.warning(self, "Invalid Deck", f"Please select exactly 10 cards. You have {len(self.selected_cards)}.")
+            QMessageBox.warning(
+                self,
+                "Invalid Deck",
+                f"Please select exactly 10 cards. You have {len(self.selected_cards)}.",
+            )
             return
 
         # Convert to Card objects
@@ -612,7 +618,9 @@ class PazaakWindow(QMainWindow):
         # Update hands
         self.player_hand.update_hand(self.player.hand)
         # Show opponent hand face down
-        opponent_hand_display = [Card("?", 0, CardType.MAIN, is_face_down=True) for _ in self.opponent.hand]
+        opponent_hand_display = [
+            Card("?", 0, CardType.MAIN, is_face_down=True) for _ in self.opponent.hand
+        ]
         self.opponent_hand.update_hand(opponent_hand_display)
 
         # Enable/disable buttons based on game state

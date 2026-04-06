@@ -46,7 +46,9 @@ def setup_holopazaak_default_env():
     from holopazaak.main_init import is_frozen
 
     if os.name == "nt":
-        os.environ["QT_MULTIMEDIA_PREFERRED_PLUGINS"] = os.environ.get("QT_MULTIMEDIA_PREFERRED_PLUGINS", "windowsmediafoundation")
+        os.environ["QT_MULTIMEDIA_PREFERRED_PLUGINS"] = os.environ.get(
+            "QT_MULTIMEDIA_PREFERRED_PLUGINS", "windowsmediafoundation"
+        )
         os.environ["QT_MEDIA_BACKEND"] = os.environ.get("QT_MEDIA_BACKEND", "windows")
     if is_frozen():
         os.environ["QT_DEBUG_PLUGINS"] = os.environ.get("QT_DEBUG_PLUGINS", "0")

@@ -59,7 +59,9 @@ class PazaakClient:
         self.game_id: str | None = None
 
         # Message handlers by type
-        self._handlers: dict[MessageType, list[Callable[[GameMessage], None]]] = {mt: [] for mt in MessageType}
+        self._handlers: dict[MessageType, list[Callable[[GameMessage], None]]] = {
+            mt: [] for mt in MessageType
+        }
 
         # Connection state
         self._connected = False
